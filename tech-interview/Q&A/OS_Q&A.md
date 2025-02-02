@@ -853,7 +853,29 @@ Ostrich Algorithm : Ignore the problem and pretend that deadlocks never occur in
 <summary>메모리 계층 구조를 설명해주세요</summary>
 
 <hr>
+메모리 게층 구조란, 메모리를 필요에 따라 (CPU가 메모리에 더 빠르게 접근하기 위해서) 여러 가지 종류로 나누어 둠을 의미한다.
 
+메모리 계층 구조를 바탕으로 컴퓨터를 설계해, 여러 상황에 맞는 여러 저장 장치를 각각의 역할이나 특징을 기반으로 사용하여 최적의 효울을 낼 수 있도록 한다.
+![image](https://github.com/user-attachments/assets/afcaa1e3-44da-4f5b-8bab-1b4ef2f8131f)
+### Register
+- CPU가 요청을 처리하는데 필요한 데이터를 **일시적**으로 저장하는 기억 장치이다.
+- CPU 안에 존재한다.
+
+### Cache
+- 캐시는 지역성의 원리를 사용해서 얻고자 하는 데이터를 필요한 순간마다 데이터가 저장되어 있는 저장소에서 가져오는 일에 대한 시간을 줄일 때 사용되는 임시 저장소이다.
+- 메인 메모리의 접근을 빠르게 하기 위한 CPU CACHE, 하드 디스크에 내장된 DISK CACHE(== DISK BUFFER), PAGE CACHE(TLB) 등이 존재한다.
+
+### Main Memory
+- 1차 기억장치(주 기억장치)로, 실행중인 프로그램이 올라가는 메모리 공간이다.
+- 휘발성 장치인 RAM과 고정 장치인 ROM이 존재한다.
+
+### Hard Disk Drive(HDD)
+- **비휘발성**으로 순차 접근이 가능한 **보조 기억 장치** 이다
+
+## 메모리 계층 구조의 목적
+- 전체 기억 장치를 구성하는데 있어, 가격은 최소화하면서 빠른 접근 속도와 대용량의 크기를 제공하는 입출력의 경제성을 확보를 목적으로 두고 있다.
+- 자주 쓰이는 데이터만 자주 쓰이는 지역성 특징 때문에 자주 쓰이는 데이터들은 메모리에서 CACHE로 올린다.
+- 메모리는 상위 계층으로 갈 수록 비싸다. 그렇기에, 계층적으로 구성하여 효율적인 구동을 위해 필요한 데이터들만 상위 계층으로 올린다. 
 <hr>
 </details>
 
@@ -861,7 +883,7 @@ Ostrich Algorithm : Ignore the problem and pretend that deadlocks never occur in
 <summary>가상 주소는 왜 사용할까요?</summary>
 
 <hr>
-
+Logical Adrress는 메모리의 공간이 한정적이기 때문에, 사용자에게 더 많은 메모리를 제공하기 위해서 등장했다. 가상 주소는 프로그램 상에서 사용자가 보는 주소 공간이다. 각각의 process들은 실제 physical memory address를 사용하지 않고, logical address를 사용한다. 
 <hr>
 </details>
 
@@ -869,7 +891,30 @@ Ostrich Algorithm : Ignore the problem and pretend that deadlocks never occur in
 <summary>주소 바인딩(Address Binding)의 3가지 방법은 무엇이 있으며 각각의 특징에 대해 설명해주세요.</summary>
 
 <hr>
+주소 바인딩은 CPU가 기계어 명령을 수행하기 위해서 논리적 주소를 통해 메모리 참조를 하게 되면 논리적 주소가 물리적 메모리와 매핑된다. 이렇게 논리적 주소를 물리적 주소와 연결 시켜주는 것이 Adress Binding 이다.
 
+이에는 Compile time Binding, Load Time Binding, Execution Time Binding(Run Time Binding) 이 있다. 
+
+### 1. Compile Time Binding
+- 컴파일 하는 시점에 해당 프로그램의 물리적 메모리의 위치가 결정된다.
+- 프로그램이 절대 주소를 적재시키는 절대코드를 생성한다.
+- 프로그램이 올라가 있는 물리적 메모리 위치를 변경하고 싶다면 다시 컴파일 해야 한다.
+     - 이러한 이유 때문에 시분할 컴퓨팅 환경에서 잘 사용하지 않는다.
+
+
+### 2. Load Time Binding
+- 프로그램이 실행이 시작될 때, 물리적 메모리 주소가 결정된다.
+- 프로그램을 메모리에 적재시키는 프로그램인 Loader의 책임 하에 물리적 메모리 주소가 부여되며, 프로그램이 종료될 때 까지 물리적 메모리 상의 위치가 고정된다.
+- 컴파일러가 재배치 가능 코드를 생성한 경우에 가능한 방식이다.
+  > 재배치 가능 코드란 프로그램이 실행될 때, 적재되는 순간에 주어진 메모리 주소(base + 10...)에 맞춰서 조정될 수 있는 코드이다.
+- 물리적 메모리 위치를 변경하고 싶다면 Reload를 해야 한다(recompile보다는 소모가 적다)
+
+### 3. Execution Time Binding
+- 프로그램이 시작한 후에도 프로그램이 위치한 물리적 메모리상의 주소가 변경될 수 있다.
+- CPU가 주소를 참조할 때마다 해당 데이터가 물리적 메모리의 어느 위치에 있는지, address mapping table을 이용해서 바인딩을 점검해야 한다.
+- 실시간 바인딩이 가능하기 위해서는 **base register** 와 **limit register**를 포함해서 **MMU(Memory Management Unit** 이라는 하드웨어적인 자원이 필요하다.
+- 대부분의 OS가 이 방법을 사용한다.
+- 물리적 메모리 위치를 바꾸고 싶다면 relocation Register의 값만 바꾸면 된다. (매우 간편)
 <hr>
 </details>
 
@@ -877,6 +922,24 @@ Ostrich Algorithm : Ignore the problem and pretend that deadlocks never occur in
 <summary>MMU란 무엇일까요?</summary>
 
 <hr>
+MMU는 논리적 주소를 물리적 주소로 매핑해주는 하드웨어 장치이다.
+
+CPU가 특정 프로세스의 논리적 주소를 참조하려고 할 때, MMU 기법은 해당 주소값에 기준 레지스터의 값을 더해서 물리적 주소값을 얻어낸다.
+- 이때 프로세스의 물리적 메모리 시작 주소인 기준 레지스터를 **Relocation register(재배치 레지스터)** 라고 한다.
+
+![image](https://github.com/user-attachments/assets/739da2be-0da8-48df-b2fd-e05127dbc039)
+
+- process 마다 각기 다른 relocation register, limit register를 갖고 있으며, 이를 통해서 logical address space를 정의한다. 이는 PCB에 저장
+  - Context Switching으로 CPU에서 수행중인 프로세스가 바뀔 때마다, **Relocation Register의 값을 해당 프로세스에 해당하는 값으로 재설정함** 으로써 프로세스 별로 adress binding을 올바르게 할 수 있다.
+- MMU는 권한이 없는 다른 프로세스의 물리적 주소 공간으로의 침범을 막기 위해서 Limit Register(한계 레지스터)를 이용해서 메모리 보안을 한다.
+  if 논리적 주소 < Limit Register에 저장된 프로세스의 크기 :
+    논리적 주소 += relocation register -> 물리적 주소룰 찾는다
+  else :
+    TRAP! -> 프로세스 강제 종료
+
+##정리
+1. 논리적 주소 -> 물리적 주소 매핑
+2. 메모리 보호!
 
 <hr>
 </details>
@@ -885,7 +948,13 @@ Ostrich Algorithm : Ignore the problem and pretend that deadlocks never occur in
 <summary>캐시란 무엇일까요?</summary>
 
 <hr>
+주기억 장치에 저장된 내용의 일부를 임시로 저장해서, CPU와 주기억장치의 속도 차이로 성능 저하를 방지해준다.
 
+CPU에서 메인 메모리에 접근하기 이전에 먼저 Cache를 확인하고, 만약 데이터가 존재한다면 Cache hit-> 바로 해당 명령어 사용, 데이터가 존재하지 않는다면 Cache miss -> Main memory 접근
+
+이를 통해서 메모리 접근 비용을 아낄 수 있다.
+
+Cache Hit을 극대화 시키기 위해서는 지역성의 원리를 이용한다.
 <hr>
 </details>
 
@@ -893,6 +962,13 @@ Ostrich Algorithm : Ignore the problem and pretend that deadlocks never occur in
 <summary>지역성(Locality)이란 무엇일까요?</summary>
 
 <hr>
+기억 장치 내의 정보를 균일하게 access하는 게 아니라, 한순간에 특정 부분을 집중적으로 참조하는 특성을 의미한다.
+
+#### -시간 지역성
+ 최근에 참조된 주소의 내용은 곧 다음에도 참조된다는 특성
+
+#### - 공간 지역성
+ 실제 프로그램이 참조된 주소와 인접한 주소의 내용이 다시 참조되는 특성
 
 <hr>
 </details>
@@ -901,6 +977,9 @@ Ostrich Algorithm : Ignore the problem and pretend that deadlocks never occur in
 <summary>동적 로딩과 동적 연결에 대해 각각 설명해주세요</summary>
 
 <hr>
+
+## Dynamic Loading(동적 로딩)
+
 
 <hr>
 </details>
