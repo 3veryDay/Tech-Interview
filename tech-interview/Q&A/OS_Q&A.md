@@ -1231,7 +1231,7 @@ Paging, Continuous Memory Allocation의 **고정 분할** 등에서 발생
 <summary>페이지 교체(Page fault 처리)의 전반적인 순서에 대해 설명해주세요</summary>
 
 <hr>
-
+C
 <hr>
 </details>
 
