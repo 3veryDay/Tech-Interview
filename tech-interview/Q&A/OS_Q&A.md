@@ -1076,7 +1076,46 @@ Cache Hit을 극대화 시키기 위해서는 지역성의 원리를 이용한�
 <summary>페이징(Paging)에 대해 설명해주세요</summary>
 
 <hr>
-프로세스의 주소 공간을 동일한 크기의 페이
+
+- 프로세스의 주소 공간을 동일한 크기의 페이지 단위로 나누어 물리적 메모리의 서로 다른 위치에 페이지들을 저장하는 방식이다.
+- 프로세스의 주소 공간 전체를 올릴 필요 없이 일부는 Backing Store에, 일부는 물리적 메모리에 혼재 시키는 것이 가능하다.
+- 물리적 메모리는 고정된 사이즈의 physical frame으로, 논리적 메모리는 고정되 사이즈의 virtual page로 나뉘게 된다. frame size와  page size는 동일
+  - 동일한 크기의 프레임을 가져, 가변 분할의 동적 메모리 할당 문제가 발생하지 않는다.
+- External Fragmentation 는 발생하지 않고, Internal Fragmentation이 발생한다.
+- **Page Table** 은 논리적 주소 -> 물리적 주소
+   - 논리적 주소 -> 페이지 번호 + 페이지 오프셋, -> address allocation -> Page Table 접근 Indx : 페이지 번호, 해당 인덱스의 Entry(항목)에는 그 페이지의 물리적 메모리의 기준 주소(Base address)가 저장된다.
+   - 페이지 번호(P)를 통해서 base address를 알 수 있고, base address +  offset => 물리적 주소
+ - Page Table이 MMU 역할을 한다. 
+> MMU(Memory Management Unit)는 **논리적 주소를 물리적 주소로 매핑해주는 하드웨어 장치**이다.
+
+- Page Table 접근
+  - 현재 CPU에서 실행중인 프로세스의 Page Table에 접근하기 위해서 OS는 **PTBR(Page Table Base Register)** 와 **PTLR(Page Table Length Register)** 을 사용한다.
+    - PTBR = 메모리 내에서 페이지 테이블의 시작 위치
+    - PTLR = 페이지 테이블의 크기
+  - 페이징 기법에서 메모리 접근 연산은 주소 변환을 위한 페이지 테이블 접근, 변환된 주소를 통한 실제 데이터 접근으로 2번의 메모리 접근이 필요하다. 이러한 페이지 테이블 접근 오버헤드를 줄이고 메모리 접근 속도를 향상 시키기 위해서 주소 변환용 하드웨어 캐시인 **TLB(Translation Look-aside Buffer)** 를 사용한다.
+ 
+  - **TLB** 는 비싸기 때문에, 빈번하게 참조되는 페이지에 대한 주소 변환 정보만 담는다.
+  - 프로세스 별로 주소 변환 정보가 달라서 context switching이 발생하면 이전 프로세스의 주소 변환 정보를 담고 있는 TLB 내용을 지운다.
+  - 프로세스의 주소 공간이 커지면 Page Table 크기도 커져서, 주소 변환을 위한 메모리 공간 낭비가 심해지고, 이를 위해 2,3,4... 단계의 다단계 Page Table이 필요하게 된다.
+  - 다단계 Page Table은 메모리 공간 소모는 줄이지만, 메모리 접근 횟수가 많아지는 문제가 있다.
+  - 이는 TLB를 사용하면 메모리 접근 시간에 대한 시간적 효율성도 얻을 수 있다. (다단계 페이지는 공간적인 이득, TLB는 접근에 대한 이득)
+
+ - 여러 프로세스에 의해 공유되는 페이지를 물리적 메모리에 하나만 적재하여 메모리를 조금 더 효율적으로 사용할 수 있다.
+ - 공유 페이지는 읽기 전용 성질을 가지고, 모든 프로세스의 논리적 주소 공간안에서 동일한 위치에 존재해야 한다는 제약이 있다.
+
+- Protection Bit(보호 비트)를 통해서 프로세스 내에서 읽기-쓰기/ 읽기 전용 등의 접근 권한 설정 가능
+- Valid-Invalid Bit(유효-무효 비트)를 통해서 해당 페이지가 메모리에 존재하는지, 존재하지 않는지에 대한 정보를 나타낸다.
+
+## Paging이 필요한 이유(장점)
+1. Provides Transparency
+2. No external fragmentation
+> Noncontinuous Memory allocation을 사용하기에 external fragmentation은 없지만, 정해진 사이즈의 page 내의 빈 공간이 발생해서 Internal Fragmentation은 생긴다.
+> page size을 줄이면 internal fragmentation이 줄어드나, page 수가 증가해서 page table의 크기 증가 -> page 탐색 시간 증가 -> disk transfer 증가(일반적으로는 4kb 사용)
+> page size와 internal fragmentation, page table size, disk IO efficiency는 Trade OFF한 관계이다. 
+
+3. provides protection to memory
+4. provides shared memory
+
 <hr>
 </details>
 
@@ -1084,7 +1123,14 @@ Cache Hit을 극대화 시키기 위해서는 지역성의 원리를 이용한�
 <summary>TLB에 대해 설명해주세요</summary>
 
 <hr>
+TLB(Translation Look-aside Buffer)는
 
+페이징 기법에서 메모리 접근 연산은 주소 변환을 위해서 Page table 접근, 변환된 주소를 통한 실제 데이터 접근으로 2번의 메모리 접근이 필요하다. 
+
+이러한 Page table 접근 오버헤드를 줄이고, 메모리 접근 속도 향상시키는 **주소 변환용 하드웨어 캐시** 인 TLB를 사용한다.
+
+- TLB는 비싸서, 페이지의 모든 정보가 아닌 빈번하게 참조되는 페이지에 대한 주소 변환 정보만 담는다.
+- process별로 주소 변환 정보가 다르기에 Context Switching이 발생하면 TLB에 있는 내용도 다 지워야 한다. 
 <hr>
 </details>
 
@@ -1092,7 +1138,20 @@ Cache Hit을 극대화 시키기 위해서는 지역성의 원리를 이용한�
 <summary>세그먼테이션(Segmentation)에 대해 설명해주세요</summary>
 
 <hr>
+Paging은 프로세스를 물리적으로 일정한 크기로 나눠서 메모리에 할당, Segmentation은 프로세스의 주소 공간을 code, data, stack와 같은 논리 단위 기능 단위로 나누어 저장하는 방식이다. 
 
+Segmentation은 크기가 균일하지 않다.
+
+논리적 주소가 `<세그먼트 번호, 오프셋>`으로 나누고, 주소 변환을 위해서는 Segmentation Table을 사용한다.
+- Segment 별로 크기가 다르기 때문에 Segment Table은 각 항목은 Base(기준점)과 Limit(한계점)을 갖는다.
+- Segmentation은 STBR, STLR(Paging에서는 PTLR, PTBR) 사용한다.
+   - STBR : CPU에서 실행중인 프로세스의 Segment Table이 위치한 메모리 주소의 시작 위치
+   - STLR : Segment 개수
+
+- 보호 비트, 유효 비트 갖고 있고, 공유 세그먼트 사용 가능
+- Segment는 의미 있는 단위로 나누기에 **공유와 보안** 측면에서 효과적이다.
+- External Fragmentation 발생, Internal Fragmentation 안 발생( Paging과 반대)
+- 메모리 연속 할당의 **Dynamic Storage-Allocation Problem** 이 발생한다. (동적 메모리 할당 문제) 
 <hr>
 </details>
 
@@ -1100,7 +1159,15 @@ Cache Hit을 극대화 시키기 위해서는 지역성의 원리를 이용한�
 <summary>페이지드 세그먼테이션(Paged Segmentation)이란 무엇일까요?</summary>
 
 <hr>
+꼭 알아야 하는 이론은 아닙니다.
 
+페이징과 시그먼테이션의 장점만을 취하는 주소 변환 기법이다.
+
+세그먼테이션과 마찬가지로 프로그램을 의미 단위의 세그먼트로 나눈다. 하지만 세그먼트가 임의의 길이를 갖는 것이 아닌 동일한 크기의 페이지들의 집합으로 구성된다.
+
+하나의 세그먼트 크기를 페이지 크기의 배수가 되도록 함으로써 세그먼테이션 기법에서 발생하는 외부조각의 문제점을 해결하며 동시에 세그먼트 단위로 프로세스 간의 공유나 프로세스 내의 접근 권한 보호가 이루어지도록 함으로써 페이징 기법의 약점을 해소한다.
+
+주소 변환을 위해 외부의 세그먼트 테이블과 내부의 페이지 테이블을 이용한다.(2개 이용)
 <hr>
 </details>
 
@@ -1108,6 +1175,14 @@ Cache Hit을 극대화 시키기 위해서는 지역성의 원리를 이용한�
 <summary>페이징과 세그먼테이션의 차이점에 대해 설명해주세요</summary>
 
 <hr>
+
+| Paging | Segmentation | 
+| ----- | ----- |
+| - | 보호, 공유 에서 유리|
+|code, data, stack 부분이 일정한 크기로 나뉘기 때문에 영역이 섞여, 비트를 설정하기 까다롭다 | 권한을 논리적으로 나누고, 해당 정보를 테이블에 추가하는데 비트를 설정하기 간단하고 안전하다. |
+|페이지 안에서 Internal Fragmentation|세그먼트 크기가 일정치 않아 External Fragmentation|
+| - | Dynamic Storage Allocation Problem | 
+|그래서 더 많이 사용 | - |
 
 <hr>
 </details>
@@ -1117,6 +1192,12 @@ Cache Hit을 극대화 시키기 위해서는 지역성의 원리를 이용한�
 
 <hr>
 
+- 현대 컴퓨터 환경에서 가장 널리 사용되는 **메모리 관리 기법** 이다
+- 물리적 메모리보다 더 큰 프로그램이 실행 지원
+- 물리적 메모리와 독립적으로 0번지부터 시작하는 자신만의 가상메모리 주소를 갖고, OS는 가상 메모리의 주소를 물리적 주소로 매핑하는 기술을 사용해서 주소를 변환해, 프로그램을 물리적 메모리에 올린다.
+- 프로그램이 돌아갈 때는 전체 프로그램을 메모리에 올리는 것이 아니라, 현재 필요한 부분만 올리고, 나머지는 Hard Disk와 같은 보조 기억장치(swap area)에 저장해뒀다가, 필요할 때 적재한다. -> **Demand paging** or **Demand Segmentation**
+
+
 <hr>
 </details>
 
@@ -1125,6 +1206,16 @@ Cache Hit을 극대화 시키기 위해서는 지역성의 원리를 이용한�
 
 <hr>
 
+#### External Fragmentation
+hole들이 조각나 있어서, 빈공간이 있음에도 불구하고, 새로운 process가 들어갈 공간이 없게 되는 현상
+
+Segmentation, Continuous Memory Allocatin 의 **가변 분할** 등에서 발생
+
+
+#### Internal Fragmentation
+Page와 같이 정해진 크기로 나눠진 공간에 데이터를 넣다보면, 마지막 페이지의 경우 남은 공간이 발생한다.
+
+Paging, Continuous Memory Allocation의 **고정 분할** 등에서 발생 
 <hr>
 </details>
 
