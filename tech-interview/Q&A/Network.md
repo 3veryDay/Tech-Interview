@@ -143,9 +143,16 @@ Sender TCP Window = min(congestion window, recieve Window)
 <summary>혼잡제어에서 윈도우 사이즈가 상황에 따라 어떻게 변경되는지 설명해주세요</summary>
 
 <hr>
-
+혼잡 제어(congestion control)
 <hr>
 </details>
+
+혼잡 제어는 기본적으로 Window SIze을 **AIMD**(Additive Increase Multiplicative Decrease) 방식으로 전송이 성공적으로 진행되면 1씩 증가, 실패하면 절반으로 감소하는 방식으로 진행된다.
+
+하지만, 초기에는 window size을 1씩 증가시키면 최적점까지 가기까지 너무 오래 걸리기에 slow start라고 선송이 성공적으로 진행될 시, 2배씩 증가하도록 한다.
+
+2배씩 증가하며 손실이 발생하면, 그때부터 AIMD 방식으로 손실이 발생했을 떄는 2분의 1, 성공 했을 때는 1씩 증가.
+![image](https://github.com/user-attachments/assets/201679ea-3984-478e-a5a2-8dd4a175152a)
 
 <details>
 <summary>혼잡제어에서 Timeout이 발생했을 때와 패킷 손실이 발생했을 때, 윈도우 사이즈의 변화는 각각 어떨까요?</summary>
