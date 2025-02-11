@@ -158,6 +158,11 @@ Sender TCP Window = min(congestion window, recieve Window)
 <summary>혼잡제어에서 Timeout이 발생했을 때와 패킷 손실이 발생했을 때, 윈도우 사이즈의 변화는 각각 어떨까요?</summary>
 
 <hr>
+Timeout은 네트워크 상에서 심각한 혼잡이라고 판단해, WIndow Size를 0으로 줄이고, 다시 slow Start하고 exponential하게 증가시킨다.
+
+반면, 패킷 손실의 경우는 AIMD 방식대로 Window Size를 절반으로 줄인다
+
+>Timeout이 발생해, window size을 0으로 줄이고, slow start을 하면 손실이 발생하기까지 window size를 2배 증가시키는 것이 아닌, Timeout이 발생한 지점의 절반 지점까지만 Exponential하게 2배씩 증가한다. 이를 Congestion Avoidance라고 한다.
 
 <hr>
 </details>
@@ -166,7 +171,18 @@ Sender TCP Window = min(congestion window, recieve Window)
 <summary>흐름제어기법 중 슬라이딩 윈도우 방식에대해 설명해주세요</summary>
 
 <hr>
+네트워크 상태가 안 좋으면, 패킷 유실 가능성이 커지므로 적절한 송신량을 결정해야 하는데, 한번에 데이터를 받을 수 있는 데이터 크기를 window size라고 하고, 네트워크 상황에 따라서 이 윈도우 사이즈를 조절하는 것을 sliding windwon라고 한다.
 
+- 흐름 제어를 위한 프로토콜 중 가장 많이 사용된다.
+- stop-and-wait 방식에서는 ACK을 받고 나서 다음 프레임을 전송해야 해서 비효율적인데, **sliding window에서는 송신자가 보낸 프레임에 대한 ACK을 받지 않더라도 위도우 내에 있는 다른 프레임을 전송할 수 있다는 이점이 있다.**
+- sliding window는 데이터가 전송되었는지에 대한 ACK이 수신될 때마다 윈도우의 범위를 이동시키기에 슬라이딩 윈도우라고 부른다.
+- 수신을 처리하고 프레임을 재전송하는 방법에 따라, Go-Back_N과 Selective Retransmission이 나뉘게 된다.
+
+- GoBackN
+  - 윈도우 내에 오류가 발생한 프레임 이후의 패킷은 모두 버리고, 재전송 하는 방식
+ 
+- Selective Retransmission
+  - 모든 패킷을 버리는 것이 아닌, 오류가 발생한 프레임만 선택적으로 재전송하는 방식.
 <hr>
 </details>
 
