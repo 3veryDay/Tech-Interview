@@ -186,48 +186,6 @@ Timeout은 네트워크 상에서 심각한 혼잡이라고 판단해, WIndow Si
 <hr>
 </details>
 
-## OSI 7계층
-<details>
-
-<summary>OSI 7계층에 대해 설명해주세요.</summary>
-
-<hr>
-
-<hr>
-</details>
-
-<details>
-<summary>OSI 7계층은 왜 나눴을까요?</summary>
-
-<hr>
-
-<hr>
-</details>
-
-<details>
-<summary>TCP/IP 4계층에 대해 설명해보세요.</summary>
-
-<hr>
-
-<hr>
-</details>
-
-<details>
-<summary>인캡슐레이션과 디캡슐레이션에 대해 설명해주세요.</summary>
-
-<hr>
-
-<hr>
-</details>
-
-
-<details>
-<summary>TCP/IP란 무엇일까요?</summary>
-
-<hr>
-
-<hr>
-</details>
 
 ## Http/Https란?
 <details>
@@ -235,6 +193,10 @@ Timeout은 네트워크 상에서 심각한 혼잡이라고 판단해, WIndow Si
 
 <hr>
 
+- 서버 클라이언트 모델을 따라 데이터를 주고 받기 위한 프로토콜이다.
+- 인터넷 상에서 hypertext를 교환하기 위해서 **통신규약으로 80포트를 사용하고 있다.
+- OSI 7계층 중에서는 7게층인 application layer에 속하며, TCP/IP 위에서 작동한다.
+- 상태를 갖고 있지 않은 **stateless protocol**이며, Method, path, version, header, body 등으로 구성되어있다.  
 <hr>
 </details>
 
@@ -351,6 +313,51 @@ Timeout은 네트워크 상에서 심각한 혼잡이라고 판단해, WIndow Si
 
 <hr>
 </details>
+
+
+## OSI 7계층
+<details>
+
+<summary>OSI 7계층에 대해 설명해주세요.</summary>
+
+<hr>
+
+<hr>
+</details>
+
+<details>
+<summary>OSI 7계층은 왜 나눴을까요?</summary>
+
+<hr>
+
+<hr>
+</details>
+
+<details>
+<summary>TCP/IP 4계층에 대해 설명해보세요.</summary>
+
+<hr>
+
+<hr>
+</details>
+
+<details>
+<summary>인캡슐레이션과 디캡슐레이션에 대해 설명해주세요.</summary>
+
+<hr>
+
+<hr>
+</details>
+
+
+<details>
+<summary>TCP/IP란 무엇일까요?</summary>
+
+<hr>
+
+<hr>
+</details>
+
 
 ## 웹 통신 흐름
 
