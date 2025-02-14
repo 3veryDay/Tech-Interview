@@ -243,6 +243,13 @@ Timeout은 네트워크 상에서 심각한 혼잡이라고 판단해, WIndow Si
 <summary>HTTP와 HTTPS의 차이점에 대해서 설명해주세요</summary>
 
 <hr>
+HTTP(Hypertext Transfer Protocol)은 client-server 통신에서 쓰이는 프로토콜이나 통신 규칙들이다.
+
+웹사이트를 방문하게 되면, 내 브라우저는 웹 서버에게 HTTP 리퀘스트를 보내고, 웹 서버는 HTTP 리스폰스로 대답한다. 이렇게 웹 서버와 브라우저는 plaintext(평문)으로 소통하는 것이다.
+
+짧게 말해서, 네트워크 통신이 가능하도록 하는 것이 HTTP 프로토콜이다.
+
+이름에서 보이듯이 HTTPS(Hypertext Transfer Protocol Secure)은 조금더 안전한 버전, 또는 HTTP의 확장이라고 볼 수 있다. HTTPS에서는 브라우저와 서버가 안전하면서 encrypted 연결을 한 후에 데이터를 주고 받는다.
 
 <hr>
 </details>
@@ -252,6 +259,34 @@ Timeout은 네트워크 상에서 심각한 혼잡이라고 판단해, WIndow Si
 <summary>stateful와 stateless의 차이점에 대해 설명하세요</summary>
 
 <hr>
+
+## Stateful(상태유지)
+상태유지란, 클라이언트와 서버 관계에서 **서버가 클라이언트의 상태를 보존**함을 의미한다.
+- 대표적으로 홈페이지에서 한번 로그인을 하면, 페이지를 이동해도 로그인이 풀리지 않고, 유지되는 것이 서버가 클라이언트 상태를 유지하고 있으니까 가능한 것이다.
+- 클라이언트의 정보를 기억한다라는 말은 어딘가에 정보를 저장하고 통신할 때마다 읽는다는 것이다.
+- 이러한 정보들은 일반적으로 브라우저의 쿠키(Cookie)에 저장되거나, 서버의 세션(Session) 메모리에 저장되어 상태를 유지하게 된다.
+- TCP
+- 
+## Stateless(무상태)
+무상태는 반대로 클라이언트와 서버 관계에서 **서버가 클라이언트의 상태를 보존하지 않음**을 의미한다
+- Stateless 구조에서는 서버는 단순히 요청이 오면 응답하고, 상태관리는 전적으로 클라이언트 몫이다.
+- 클라이언트와 서버간의 통신에 필요한 모든 상태 정보들은 클라이언트가 가지고 있다가, 서버와 통신할 때 데이터를 실어 보내는 것이다.
+- 서버는 단순히 받고 응답하기에, 상태 유지에 대한 부하가 현저히 줄어들게 된다.
+- 또한, 서버가 중간에 바뀌어도, 문제가 없다.
+- **그래서 대량의 트래픽 발생시에도 서버 확장을 통해 대처를 수월하게 할 수 있다**
+- HTTP, UDP
+
+## Stateless와 Token
+로그인 유지와 같은 상태는 stateful한 상태이어야 하는데, 서버에 부하가 생길 수 있다. 그래서 stateless 특징을 유지하면서 로그인 상태를 유지하도록 하는 기술이 JWT 토큰이다.
+
+토큰은 클라이언트가 암호화된 로그인 정보들을 지니고 있다가 서버에 통신할 때 넘겨줌으로써 내가 로그인 됐음을 인증하는 방식이다.
+
+##Stateless 와 HTTP/REST
+HTTP는 stateless한 성격을 가진 protocol
+REST는 stateless한 성격을 가진 **설계 구조**
+
+<https://inpa.tistory.com/entry/WEB-%F0%9F%93%9A-Stateful-Stateless-%EC%A0%95%EB%A6%AC>
+https://inpa.tistory.com/entry/WEB-%F0%9F%93%9A-JWTjson-web-token-%EB%9E%80-%F0%9F%92%AF-%EC%A0%95%EB%A6%AC
 
 <hr>
 </details>
