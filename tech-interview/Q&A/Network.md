@@ -205,6 +205,27 @@ Timeout은 네트워크 상에서 심각한 혼잡이라고 판단해, WIndow Si
 
 <hr>
 
+##HTTP 1.0
+- 브라우저에 친화적인 protocol
+- Method : **GET, HEAD, POST
+- Connection 특성 : 응답 직후종료
+> Connection을 응답 직후에 닫기 때문에, 각각의 요청마다 새로운 연결을 열고 닫으며불필요한 3-2T-HANDSHAKING을 하게 된다.
+
+## HTTP 1.1
+- 오늘날 가장 많이 사용되는 HTTP 버전
+- 영구 및 `파이프 라인` 연결, 압축,압축해제, 가상 호스팅, 캐시 등이 추가 -> 응답 속도가 빨라지고, 대역폭이 절약되는 등 성능 최적화 및 기능 향상되었다.
+- Method : GET, HEAD, POST **PUT, DELETE, TRACE, OPTIONS**
+- Connection 특성 : Persistent Connection
+  - 한번 Connection을 맺고, 해당 Connection이 열려있다면, Connection 을 통해 Request, response 작업을 진행한다.
+  - `HTTP 1.1 Keep-alive pipelining` : Pipelining을 사용할 때, client는 여러 request를 response의 응답을 기다리지 않고 보낼 수 있다.
+  -  HTTP 1.1 Keep-alive multiple connections : 클라이언트는 많은 양의 objects를 검색하는 성능을 높이기 위해서 TCP 다중 연결을 할 수 있다.
+ 
+## HTTP 2.0
+- HTTP 1.1 프로토콜을 계승하며 성능 향상에 초점을 맞췄다.
+  - HTTP 1.1은 평문(plain text)을 사용하고, 개행으로 구별되었으나, 2.0은 바이너리 포맷으로 인코딩된 messgae, frame으로 구성된다.
+- Connection : Multiplexed Streams
+  - 한 Connection으로 동시에 여러 개 메시지를 주고 받을 수 있고, response는 순서에 상관없이 stream으로 주고받는다.
+ 
 <hr>
 </details>
 
@@ -214,6 +235,7 @@ Timeout은 네트워크 상에서 심각한 혼잡이라고 판단해, WIndow Si
 
 <hr>
 
+패킷 탈취, 클라이언트 위장할 수 있는 등의 **보안 문제**로부터 보호
 <hr>
 </details>
 
