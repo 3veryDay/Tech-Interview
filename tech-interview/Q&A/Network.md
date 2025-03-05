@@ -400,6 +400,11 @@ ex)  PATCH 요청을 보낼 떄, 나이를 30으로 업데이트 하는 요청�
 
 <hr>
 
+`HTTP keep-alive`은 HTTP의 Persistent Connection 을 맺는 기법 중 하나로 HTTP 1.0+ 부터 지원하고 있다. 하지만 해당 옵션은 설계상 여러 문제점이 생기며, HTTP 1.1부터는 사용되지 않고 있지만, 여전히 많은 **웹 애플리케이션에서**에사용 되고 있다. 
+
+`TCP keep-alive`는3-way handshake을 통해서 얻은 session을 요청에 대한 응답을 하더라도, 없애지 않고 계속 유지해주는 기능이다. TCP keep alive는 일정 시간이 지나면 연결된 세션이 살아있는지 확인하기 위해서 아주 작은 양의 패킷을 하나 보낸다. 패킷은 연결을 유지하기 원하는 쪽에서 보낸다. 패킷을 주고 받은 다음에 타미어는 원점으로 돌아가고 카운트를 진행한다. 최초로 세션이 연결 된 다음 `tcp keepalive time`동안 기다린다. 그리고 확인 패킷을 보내게 된다. 확인 패킷에 대한 등답이 오지 않으면 `tcp keepalive intv`간격으로 `tcp keepalive probes`만큼 패킷을 더 보낸다. `tcp keepalive probes`의 마지막 패킷에 대해서 응답이 오지 않으면 연결이 끊긴다.
+
+TCP keepalive는 연결된 세션의 재활용 측면에서만이 아니라, 좀비 커넷견의 삭제에도 도움을 준다. TCP 연결을 끊으려면 FIN 패킷이 필요하다. 하지만, 다양한 이유로 FIN 패킷을 받을 수 없는 상황이 된다면, 계속 연결된 것 처럼 남아있다. TCP Keepalive 옵션을 사용한다면 일정 시간동안 확인 패킷을 보내는 로직을 통해 일정 시간동안 응답이 없다면 연결을 종료하기에, zombie connection 방지할 수 있다. 
 <hr>
 </details>
 
